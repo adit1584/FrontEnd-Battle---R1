@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aurelius Capital - Premium Investment Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        luxury: {
+                            50: '#faf7ff',
+                            100: '#f3ecff',
+                            200: '#e9d8ff',
+                            300: '#d8b4fe',
+                            400: '#c084fc',
+                            500: '#a855f7',
+                            600: '#9333ea',
+                            700: '#7c3aed',
+                            800: '#6b21a8',
+                            900: '#581c87',
+                        },
+                        emerald: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            200: '#a7f3d0',
+                            300: '#6ee7b7',
+                            400: '#34d399',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46',
+                            900: '#064e3b',
+                        },
+                        platinum: {
+                            50: '#f8fafc',
+                            100: '#f1f5f9',
+                            200: '#e2e8f0',
+                            300: '#cbd5e1',
+                            400: '#94a3b8',
+                            500: '#64748b',
+                            600: '#475569',
+                            700: '#334155',
+                            800: '#1e293b',
+                            900: '#0f172a',
+                        }
+                    },
+                    fontFamily: {
+                        'luxury': ['Playfair Display', 'serif'],
+                        'elegant': ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-black text-white overflow-x-hidden">
+    <!-- Luxury Loader -->
+    <div id="luxury-loader" class="fixed inset-0 z-50 bg-gradient-to-br from-black via-purple-900/20 to-black flex items-center justify-center">
+        <div class="text-center">
+            <!-- Animated Logo -->
+            <div class="relative mb-8">
+                <div class="w-32 h-32 border-2 border-luxury-400 rounded-full relative animate-spin-slow">
+                    <div class="absolute inset-4 border-2 border-emerald-400 rounded-full animate-spin-reverse"></div>
+                    <div class="absolute inset-8 bg-gradient-to-r from-luxury-400 to-emerald-500 rounded-full animate-pulse-luxury-enhanced"></div>
+                    <div class="absolute inset-1/2 w-4 h-4 -translate-x-1/2 -translate-y-1/2 bg-white rounded-full animate-ping-enhanced"></div>
+                </div>
+                
+                <!-- Enhanced floating particles -->
+                <div class="absolute -top-4 -left-4 w-3 h-3 bg-luxury-400 rounded-full animate-float-luxury-enhanced"></div>
+                <div class="absolute -top-2 -right-6 w-2 h-2 bg-emerald-400 rounded-full animate-float-luxury-delay-enhanced"></div>
+                <div class="absolute -bottom-4 -left-6 w-2.5 h-2.5 bg-luxury-500 rounded-full animate-float-luxury-delay-2-enhanced"></div>
+                <div class="absolute -bottom-2 -right-4 w-1.5 h-1.5 bg-emerald-500 rounded-full animate-float-luxury-delay-3-enhanced"></div>
+                <div class="absolute top-0 left-1/2 w-1 h-1 bg-platinum-300 rounded-full animate-orbit"></div>
+                <div class="absolute bottom-0 right-1/3 w-1 h-1 bg-platinum-400 rounded-full animate-orbit-reverse"></div>
+            </div>
+
+            <!-- Enhanced Progress Bar -->
+            <div class="w-80 h-2 bg-gray-800 rounded-full mb-4 overflow-hidden relative">
+                <div class="absolute inset-0 bg-gradient-to-r from-luxury-500/20 to-emerald-500/20 animate-shimmer-slow"></div>
+                <div id="luxury-progress" class="h-full bg-gradient-to-r from-luxury-400 via-emerald-400 to-luxury-600 rounded-full transition-all duration-300 ease-out animate-gradient-flow" style="width: 0%"></div>
+            </div>
+
+            <!-- Enhanced Loading Text -->
+            <div id="luxury-loading-text" class="text-luxury-400 font-elegant text-lg animate-pulse-luxury-text">
+                Initializing Aurelius Capital...
+            </div>
+
+            <!-- Progress Percentage -->
+            <div id="luxury-progress-text" class="text-platinum-400 font-elegant text-sm mt-2 animate-fade-in-out">0%</div>
+        </div>
+    </div>
+
+    <!-- Enhanced Theme Toggle -->
+    <button id="theme-toggle" class="fixed top-8 right-8 z-40 w-14 h-14 bg-black/80 backdrop-blur-sm border border-luxury-400/30 rounded-full flex items-center justify-center hover:border-luxury-400/60 transition-all duration-300 hover:scale-110 group animate-float-gentle">
+        <div id="sun-icon" class="hidden">
+            <i data-lucide="sun" class="w-6 h-6 text-luxury-400 group-hover:text-emerald-400 transition-colors duration-300"></i>
+        </div>
+        <div id="moon-icon">
+            <i data-lucide="moon" class="w-6 h-6 text-luxury-400 group-hover:text-emerald-400 transition-colors duration-300"></i>
+        </div>
+        <div id="theme-tooltip" class="absolute -bottom-12 left-1/2 -translate-x-1/2 px-3 py-1 bg-black/90 text-luxury-400 text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none whitespace-nowrap">
+            Switch to light mode
+        </div>
+    </button>
+
+    <!-- Enhanced Particle Canvas -->
+    <canvas id="luxury-particles" class="fixed inset-0 pointer-events-none z-0"></canvas>
+
+    <!-- Main Content -->
+    <div id="main-content" class="hidden relative z-10">
+        <!-- Enhanced Sticky Navigation -->
+        <nav id="luxury-nav" class="fixed top-0 left-0 right-0 z-30 bg-black/80 backdrop-blur-md border-b border-luxury-400/20 transition-all duration-300">
+            <div class="max-w-7xl mx-auto px-6 py-4">
+                <div class="flex items-center justify-between">
+                    <!-- Enhanced Logo -->
+                    <div class="flex items-center space-x-3 animate-slide-in-left">
+                        <div class="w-10 h-10 bg-gradient-to-r from-luxury-400 to-emerald-500 rounded-lg flex items-center justify-center animate-pulse-gentle">
+                            <i data-lucide="crown" class="w-6 h-6 text-black"></i>
+                        </div>
+                        <div class="font-luxury text-2xl font-bold bg-gradient-to-r from-luxury-400 via-emerald-400 to-luxury-600 bg-clip-text text-transparent animate-gradient-text">
+                            Aurelius Capital
+                        </div>
+                    </div>
+
+                    <!-- Enhanced Navigation Links -->
+                    <div class="hidden md:flex items-center space-x-8 animate-slide-in-down">
+                        <a href="#home" class="nav-link text-white hover:text-luxury-400 transition-all duration-300 font-elegant relative">Home</a>
+                        <a href="#services" class="nav-link text-white hover:text-luxury-400 transition-all duration-300 font-elegant relative">Services</a>
+                        <a href="#portfolio" class="nav-link text-white hover:text-luxury-400 transition-all duration-300 font-elegant relative">Portfolio</a>
+                        <a href="#insights" class="nav-link text-white hover:text-luxury-400 transition-all duration-300 font-elegant relative">Insights</a>
+                        <a href="#about" class="nav-link text-white hover:text-luxury-400 transition-all duration-300 font-elegant relative">About</a>
+                        <a href="#contact" class="nav-link text-white hover:text-luxury-400 transition-all duration-300 font-elegant relative">Contact</a>
+                    </div>
+
+                    <!-- Enhanced CTA Button -->
+                    <button id="luxury-cta" class="hidden md:block relative px-6 py-3 bg-gradient-to-r from-luxury-400 to-emerald-500 text-black font-elegant font-semibold rounded-lg hover:from-luxury-300 hover:to-emerald-400 transition-all duration-300 hover:scale-105 overflow-hidden group animate-slide-in-right">
+                        <span class="relative z-10">Get Started</span>
+                        <div class="absolute inset-0 bg-gradient-to-r from-emerald-400 to-luxury-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        <div class="absolute inset-0 animate-shimmer-button"></div>
+                    </button>
+
+                    <!-- Mobile Menu Button -->
+                    <button id="mobile-menu-btn" class="md:hidden w-10 h-10 flex items-center justify-center animate-slide-in-right">
+                        <i data-lucide="menu" class="w-6 h-6 text-luxury-400"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Enhanced Hero Section -->
+        <section id="home" class="min-h-screen flex items-center justify-center relative overflow-hidden">
+            <!-- Enhanced Background Elements -->
+            <div id="parallax-bg" class="absolute inset-0 opacity-20">
+                <div class="absolute top-20 left-20 w-96 h-96 bg-gradient-to-r from-luxury-400/20 to-emerald-500/20 rounded-full blur-3xl animate-pulse-luxury-slow-enhanced"></div>
+                <div class="absolute bottom-20 right-20 w-80 h-80 bg-gradient-to-r from-emerald-500/20 to-luxury-600/20 rounded-full blur-3xl animate-pulse-luxury-slow-delay-enhanced"></div>
+                <div class="absolute top-1/2 left-1/4 w-64 h-64 bg-gradient-to-r from-platinum-400/10 to-luxury-400/10 rounded-full blur-2xl animate-float-slow"></div>
+            </div>
+
+            <!-- Enhanced Cursor Follower -->
+            <div id="cursor-follower" class="absolute w-96 h-96 bg-gradient-to-r from-luxury-400/10 via-emerald-400/10 to-luxury-600/10 rounded-full blur-3xl pointer-events-none transition-all duration-1000 ease-out"></div>
+
+            <div class="text-center max-w-6xl mx-auto px-6 relative z-10">
+                <!-- Enhanced Badge -->
+                <div class="inline-flex items-center space-x-3 bg-gradient-to-r from-luxury-400/10 to-emerald-500/10 backdrop-blur-sm border border-luxury-400/30 rounded-full px-6 py-3 mb-8 animate-fade-in-up-enhanced">
+                    <i data-lucide="trending-up" class="w-5 h-5 text-luxury-400 animate-pulse-luxury-enhanced"></i>
+                    <span class="text-emerald-300 font-elegant font-medium">Premium Investment Platform</span>
+                    <div class="w-2 h-2 bg-luxury-400 rounded-full animate-ping-enhanced"></div>
+                </div>
+
+                <!-- Enhanced Main Heading -->
+                <h1 class="text-6xl md:text-8xl font-luxury font-bold mb-6 animate-fade-in-up-delay-enhanced">
+                    <span class="bg-gradient-to-r from-luxury-300 via-emerald-400 to-luxury-500 bg-clip-text text-transparent animate-gradient-luxury-enhanced">
+                        WEALTH
+                    </span>
+                    <br>
+                    <span class="bg-gradient-to-r from-emerald-400 via-luxury-500 to-emerald-600 bg-clip-text text-transparent animate-gradient-luxury-reverse-enhanced">
+                        REDEFINED
+                    </span>
+                </h1>
+
+                <!-- Enhanced Subtitle -->
+                <p class="text-xl md:text-2xl text-platinum-300 mb-8 max-w-4xl mx-auto leading-relaxed font-elegant animate-fade-in-up-delay-2-enhanced">
+                    Experience the pinnacle of luxury investment management with AI-powered insights, 
+                    exclusive opportunities, and personalized wealth strategies crafted for the elite.
+                </p>
+
+                <!-- Enhanced Feature Highlights -->
+                <div class="flex flex-wrap justify-center gap-6 mb-12 animate-fade-in-up-delay-3-enhanced">
+                    <div class="flex items-center space-x-2 bg-black/40 backdrop-blur-sm rounded-full px-4 py-2 border border-luxury-400/20 hover:border-emerald-400/40 transition-all duration-300 hover:scale-105 animate-float-gentle">
+                        <i data-lucide="shield-check" class="w-5 h-5 text-emerald-400"></i>
+                        <span class="text-platinum-300 font-elegant font-medium">Bank-Grade Security</span>
+                    </div>
+                    <div class="flex items-center space-x-2 bg-black/40 backdrop-blur-sm rounded-full px-4 py-2 border border-luxury-400/20 hover:border-emerald-400/40 transition-all duration-300 hover:scale-105 animate-float-gentle-delay">
+                        <i data-lucide="brain" class="w-5 h-5 text-luxury-400"></i>
+                        <span class="text-platinum-300 font-elegant font-medium">AI-Powered Analytics</span>
+                    </div>
+                    <div class="flex items-center space-x-2 bg-black/40 backdrop-blur-sm rounded-full px-4 py-2 border border-luxury-400/20 hover:border-emerald-400/40 transition-all duration-300 hover:scale-105 animate-float-gentle-delay-2">
+                        <i data-lucide="crown" class="w-5 h-5 text-emerald-500"></i>
+                        <span class="text-platinum-300 font-elegant font-medium">Exclusive Access</span>
+                    </div>
+                </div>
+
+                <!-- Enhanced CTA Buttons -->
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16 animate-fade-in-up-delay-4-enhanced">
+                    <button id="hero-cta" class="relative px-8 py-4 bg-gradient-to-r from-luxury-400 to-emerald-500 text-black font-elegant font-semibold rounded-lg hover:from-luxury-300 hover:to-emerald-400 transition-all duration-300 hover:scale-105 overflow-hidden group animate-bounce-gentle">
+                        <span class="relative z-10">Start Your Journey</span>
+                        <div class="absolute inset-0 bg-gradient-to-r from-emerald-400 to-luxury-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        <div class="absolute inset-0 animate-shimmer-button"></div>
+                    </button>
+
+                    <button class="group relative px-8 py-4 bg-transparent border-2 border-luxury-400/40 text-luxury-400 rounded-lg font-elegant font-semibold hover:border-emerald-400/60 hover:text-emerald-400 transition-all duration-300 hover:scale-105 animate-bounce-gentle-delay">
+                        <span class="relative z-10">Explore Portfolio</span>
+                        <div class="absolute inset-0 bg-gradient-to-r from-luxury-400/0 to-emerald-500/0 group-hover:from-luxury-400/10 group-hover:to-emerald-500/10 rounded-lg transition-all duration-300"></div>
+                    </button>
+                </div>
+
+                <!-- Enhanced Scroll Indicator -->
+                <div class="animate-bounce-enhanced">
+                    <i data-lucide="chevron-down" class="w-8 h-8 text-luxury-400 mx-auto animate-pulse-luxury-enhanced"></i>
+                </div>
+            </div>
+
+            <!-- Enhanced Decorative Elements -->
+            <div class="absolute top-1/4 left-10 w-1 h-32 bg-gradient-to-b from-luxury-400/50 to-transparent animate-pulse-luxury-enhanced"></div>
+            <div class="absolute top-1/3 right-10 w-1 h-24 bg-gradient-to-b from-emerald-500/50 to-transparent animate-pulse-luxury-delay-enhanced"></div>
+            <div class="absolute bottom-1/4 left-1/4 w-2 h-16 bg-gradient-to-b from-platinum-400/30 to-transparent animate-sway"></div>
+            <div class="absolute bottom-1/3 right-1/4 w-1.5 h-20 bg-gradient-to-b from-luxury-500/40 to-transparent animate-sway-delay"></div>
+        </section>
+
+        <!-- Enhanced Services Section -->
+        <section id="services" class="py-32 px-6">
+            <div class="max-w-7xl mx-auto">
+                <!-- Enhanced Section Header -->
+                <div class="text-center mb-20">
+                    <div class="inline-flex items-center space-x-2 bg-gradient-to-r from-luxury-400/10 to-emerald-500/10 backdrop-blur-sm border border-luxury-400/30 rounded-full px-6 py-3 mb-6 animate-slide-in-up">
+                        <i data-lucide="briefcase" class="w-5 h-5 text-luxury-400 animate-pulse-luxury-enhanced"></i>
+                        <span class="text-emerald-300 font-elegant font-medium">Premium Services</span>
+                    </div>
+
+                    <h2 class="text-5xl md:text-6xl font-luxury font-bold mb-6 animate-fade-in-scale">
+                        <span class="bg-gradient-to-r from-luxury-300 via-emerald-400 to-luxury-500 bg-clip-text text-transparent animate-gradient-text">
+                            Exclusive Offerings
+                        </span>
+                    </h2>
+
+                    <p class="text-xl text-platinum-400 max-w-3xl mx-auto font-elegant animate-fade-in-up-delay">
+                        Tailored investment solutions designed for discerning clients who demand excellence
+                    </p>
+                </div>
+
+                <!-- Enhanced Services Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="luxury-service-card group relative bg-gradient-to-br from-gray-900/80 to-black/80 backdrop-blur-sm rounded-2xl p-8 border border-luxury-400/20 hover:border-emerald-400/40 transition-all duration-500 hover:scale-105 animate-slide-in-up-stagger">
+                        <div class="absolute inset-0 bg-gradient-to-br from-luxury-400/5 to-emerald-500/5 opacity-0 group-hover:opacity-100 rounded-2xl transition-opacity duration-500"></div>
+                        
+                        <div class="relative z-10">
+                            <div class="w-16 h-16 bg-gradient-to-r from-luxury-400 to-emerald-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 animate-pulse-gentle">
+                                <i data-lucide="trending-up" class="w-8 h-8 text-black"></i>
+                            </div>
+                            
+                            <h3 class="text-2xl font-luxury font-bold text-white mb-4 group-hover:text-luxury-400 transition-colors duration-300">
+                                Portfolio Management
+                            </h3>
+                            
+                            <p class="text-platinum-400 leading-relaxed font-elegant group-hover:text-platinum-300 transition-colors duration-300">
+                                Sophisticated portfolio strategies tailored to your risk profile and investment objectives, managed by our team of expert analysts.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="luxury-service-card group relative bg-gradient-to-br from-gray-900/80 to-black/80 backdrop-blur-sm rounded-2xl p-8 border border-luxury-400/20 hover:border-emerald-400/40 transition-all duration-500 hover:scale-105 animate-slide-in-up-stagger-delay">
+                        <div class="absolute inset-0 bg-gradient-to-br from-emerald-400/5 to-luxury-500/5 opacity-0 group-hover:opacity-100 rounded-2xl transition-opacity duration-500"></div>
+                        
+                        <div class="relative z-10">
+                            <div class="w-16 h-16 bg-gradient-to-r from-emerald-400 to-luxury-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 animate-pulse-gentle-delay">
+                                <i data-lucide="shield" class="w-8 h-8 text-black"></i>
+                            </div>
+                            
+                            <h3 class="text-2xl font-luxury font-bold text-white mb-4 group-hover:text-emerald-400 transition-colors duration-300">
+                                Wealth Protection
+                            </h3>
+                            
+                            <p class="text-platinum-400 leading-relaxed font-elegant group-hover:text-platinum-300 transition-colors duration-300">
+                                Comprehensive wealth preservation strategies including tax optimization, estate planning, and risk management solutions.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="luxury-service-card group relative bg-gradient-to-br from-gray-900/80 to-black/80 backdrop-blur-sm rounded-2xl p-8 border border-luxury-400/20 hover:border-emerald-400/40 transition-all duration-500 hover:scale-105 animate-slide-in-up-stagger-delay-2">
+                        <div class="absolute inset-0 bg-gradient-to-br from-luxury-400/5 to-emerald-500/5 opacity-0 group-hover:opacity-100 rounded-2xl transition-opacity duration-500"></div>
+                        
+                        <div class="relative z-10">
+                            <div class="w-16 h-16 bg-gradient-to-r from-luxury-500 to-emerald-400 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 animate-pulse-gentle-delay-2">
+                                <i data-lucide="globe" class="w-8 h-8 text-black"></i>
+                            </div>
+                            
+                            <h3 class="text-2xl font-luxury font-bold text-white mb-4 group-hover:text-luxury-400 transition-colors duration-300">
+                                Global Markets
+                            </h3>
+                            
+                            <p class="text-platinum-400 leading-relaxed font-elegant group-hover:text-platinum-300 transition-colors duration-300">
+                                Access to exclusive international investment opportunities across emerging and developed markets worldwide.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="luxury-service-card group relative bg-gradient-to-br from-gray-900/80 to-black/80 backdrop-blur-sm rounded-2xl p-8 border border-luxury-400/20 hover:border-emerald-400/40 transition-all duration-500 hover:scale-105 animate-slide-in-up-stagger-delay-3">
+                        <div class="absolute inset-0 bg-gradient-to-br from-emerald-400/5 to-luxury-500/5 opacity-0 group-hover:opacity-100 rounded-2xl transition-opacity duration-500"></div>
+                        
+                        <div class="relative z-10">
+                            <div class="w-16 h-16 bg-gradient-to-r from-emerald-500 to-luxury-400 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 animate-pulse-gentle-delay-3">
+                                <i data-lucide="brain" class="w-8 h-8 text-black"></i>
+                            </div>
+                            
+                            <h3 class="text-2xl font-luxury font-bold text-white mb-4 group-hover:text-emerald-400 transition-colors duration-300">
+                                AI Analytics
+                            </h3>
+                            
+                            <p class="text-platinum-400 leading-relaxed font-elegant group-hover:text-platinum-300 transition-colors duration-300">
+                                Cutting-edge artificial intelligence and machine learning algorithms to identify market trends and optimize returns.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="luxury-service-card group relative bg-gradient-to-br from-gray-900/80 to-black/80 backdrop-blur-sm rounded-2xl p-8 border border-luxury-400/20 hover:border-emerald-400/40 transition-all duration-500 hover:scale-105 animate-slide-in-up-stagger-delay-4">
+                        <div class="relative z-10">
+                            <div class="w-16 h-16 bg-gradient-to-r from-luxury-400 to-emerald-500 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 animate-pulse-gentle-delay-4">
+                                <i data-lucide="users" class="w-8 h-8 text-black"></i>
+                            </div>
+                            
+                            <h3 class="text-2xl font-luxury font-bold text-white mb-4 group-hover:text-luxury-400 transition-colors duration-300">
+                                Private Banking
+                            </h3>
+                            
+                            <p class="text-platinum-400 leading-relaxed font-elegant group-hover:text-platinum-300 transition-colors duration-300">
+                                Exclusive private banking services with dedicated relationship managers and personalized financial solutions.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="luxury-service-card group relative bg-gradient-to-br from-gray-900/80 to-black/80 backdrop-blur-sm rounded-2xl p-8 border border-luxury-400/20 hover:border-emerald-400/40 transition-all duration-500 hover:scale-105 animate-slide-in-up-stagger-delay-5">
+                        <div class="absolute inset-0 bg-gradient-to-br from-luxury-400/5 to-emerald-500/5 opacity-0 group-hover:opacity-100 rounded-2xl transition-opacity duration-500"></div>
+                        
+                        <div class="relative z-10">
+                            <div class="w-16 h-16 bg-gradient-to-r from-emerald-400 to-luxury-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 animate-pulse-gentle-delay-5">
+                                <i data-lucide="crown" class="w-8 h-8 text-black"></i>
+                            </div>
+                            
+                            <h3 class="text-2xl font-luxury font-bold text-white mb-4 group-hover:text-emerald-400 transition-colors duration-300">
+                                Concierge Services
+                            </h3>
+                            
+                            <p class="text-platinum-400 leading-relaxed font-elegant group-hover:text-platinum-300 transition-colors duration-300">
+                                Premium lifestyle and concierge services to complement your investment journey with luxury experiences.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Enhanced Portfolio Performance Section -->
+        <section id="portfolio" class="py-32 px-6 bg-gradient-to-b from-black via-purple-900/10 to-gray-900">
+            <div class="max-w-7xl mx-auto">
+                <!-- Enhanced Section Header -->
+                <div class="text-center mb-20">
+                    <div class="inline-flex items-center space-x-2 bg-gradient-to-r from-luxury-400/10 to-emerald-500/10 backdrop-blur-sm border border-luxury-400/30 rounded-full px-6 py-3 mb-6 animate-slide-in-up">
+                        <i data-lucide="bar-chart-3" class="w-5 h-5 text-luxury-400 animate-pulse-luxury-enhanced"></i>
+                        <span class="text-emerald-300 font-elegant font-medium">Performance Metrics</span>
+                    </div>
+
+                    <h2 class="text-5xl md:text-6xl font-luxury font-bold mb-6 animate-fade-in-scale">
+                        <span class="bg-gradient-to-r from-luxury-300 via-emerald-400 to-luxury-500 bg-clip-text text-transparent animate-gradient-text">
+                            Exceptional Returns
+                        </span>
+                    </h2>
+
+                    <p class="text-xl text-platinum-400 max-w-3xl mx-auto font-elegant animate-fade-in-up-delay">
+                        Our track record speaks for itself - consistent outperformance across all market conditions
+                    </p>
+                </div>
+
+                <!-- Enhanced Stats Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+                    <div class="luxury-stat-card text-center bg-gradient-to-br from-gray-900/50 to-black/50 backdrop-blur-sm rounded-3xl p-8 border border-luxury-400/20 hover:border-emerald-400/40 transition-all duration-500 hover:scale-105 animate-slide-in-up-stagger">
+                        <div class="w-20 h-20 bg-gradient-to-r from-luxury-400 to-emerald-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg animate-pulse-gentle">
+                            <i data-lucide="trending-up" class="w-10 h-10 text-black"></i>
+                        </div>
+                        <div class="text-4xl md:text-5xl font-luxury font-bold mb-2 bg-gradient-to-r from-luxury-400 to-emerald-500 bg-clip-text text-transparent">
+                            <span class="stat-number" data-target="24.7">0</span>%
+                        </div>
+                        <div class="text-platinum-400 font-elegant font-medium text-lg">
+                            Annual Returns
+                        </div>
+                    </div>
+
+                    <div class="luxury-stat-card text-center bg-gradient-to-br from-gray-900/50 to-black/50 backdrop-blur-sm rounded-3xl p-8 border border-luxury-400/20 hover:border-emerald-400/40 transition-all duration-500 hover:scale-105 animate-slide-in-up-stagger-delay">
+                        <div class="w-20 h-20 bg-gradient-to-r from-emerald-400 to-luxury-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg animate-pulse-gentle-delay">
+                            <i data-lucide="shield-check" class="w-10 h-10 text-black"></i>
+                        </div>
+                        <div class="text-4xl md:text-5xl font-luxury font-bold mb-2 bg-gradient-to-r from-emerald-400 to-luxury-500 bg-clip-text text-transparent">
+                            $<span class="stat-number" data-target="2.8">0</span>B
+                        </div>
+                        <div class="text-platinum-400 font-elegant font-medium text-lg">
+                            Assets Under Management
+                        </div>
+                    </div>
+
+                    <div class="luxury-stat-card text-center bg-gradient-to-br from-gray-900/50 to-black/50 backdrop-blur-sm rounded-3xl p-8 border border-luxury-400/20 hover:border-emerald-400/40 transition-all duration-500 hover:scale-105 animate-slide-in-up-stagger-delay-2">
+                        <div class="w-20 h-20 bg-gradient-to-r from-luxury-500 to-emerald-400 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg animate-pulse-gentle-delay-2">
+                            <i data-lucide="users" class="w-10 h-10 text-black"></i>
+                        </div>
+                        <div class="text-4xl md:text-5xl font-luxury font-bold mb-2 bg-gradient-to-r from-luxury-500 to-emerald-400 bg-clip-text text-transparent">
+                            <span class="stat-number" data-target="500">0</span>+
+                        </div>
+                        <div class="text-platinum-400 font-elegant font-medium text-lg">
+                            Elite Clients
+                        </div>
+                    </div>
+
+                    <div class="luxury-stat-card text-center bg-gradient-to-br from-gray-900/50 to-black/50 backdrop-blur-sm rounded-3xl p-8 border border-luxury-400/20 hover:border-emerald-400/40 transition-all duration-500 hover:scale-105 animate-slide-in-up-stagger-delay-3">
+                        <div class="w-20 h-20 bg-gradient-to-r from-emerald-500 to-luxury-400 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg animate-pulse-gentle-delay-3">
+                            <i data-lucide="globe" class="w-10 h-10 text-black"></i>
+                        </div>
+                        <div class="text-4xl md:text-5xl font-luxury font-bold mb-2 bg-gradient-to-r from-emerald-500 to-luxury-400 bg-clip-text text-transparent">
+                            <span class="stat-number" data-target="25">0</span>+
+                        </div>
+                        <div class="text-platinum-400 font-elegant font-medium text-lg">
+                            Global Markets
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Enhanced Animated Chart -->
+                <div class="bg-gradient-to-br from-gray-900/50 to-black/50 backdrop-blur-sm rounded-3xl p-8 border border-luxury-400/20 animate-fade-in-up overflow-hidden">
+                    <div class="flex items-center justify-between mb-8">
+                        <h3 class="text-2xl font-luxury font-bold text-white">Portfolio Performance</h3>
+                        <div class="flex space-x-4">
+                            <button class="chart-period-btn px-4 py-2 bg-luxury-400/20 text-luxury-400 rounded-lg font-elegant text-sm hover:bg-luxury-400/30 transition-colors duration-300" data-period="1Y">1Y</button>
+                            <button class="chart-period-btn px-4 py-2 bg-gradient-to-r from-luxury-400 to-emerald-500 text-black rounded-lg font-elegant text-sm font-semibold active" data-period="5Y">5Y</button>
+                            <button class="chart-period-btn px-4 py-2 bg-emerald-400/20 text-emerald-400 rounded-lg font-elegant text-sm hover:bg-emerald-400/30 transition-colors duration-300" data-period="10Y">10Y</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Enhanced Animated Chart Container -->
+                    <div class="relative h-80 bg-gradient-to-t from-luxury-400/5 via-emerald-400/5 to-transparent rounded-xl overflow-hidden">
+                        <!-- Animated Grid Lines -->
+                        <div class="absolute inset-0 opacity-20">
+                            <div class="grid-line h-px bg-luxury-400/30 absolute top-1/4 left-0 right-0 animate-fade-in-delayed"></div>
+                            <div class="grid-line h-px bg-luxury-400/30 absolute top-2/4 left-0 right-0 animate-fade-in-delayed-2"></div>
+                            <div class="grid-line h-px bg-luxury-400/30 absolute top-3/4 left-0 right-0 animate-fade-in-delayed-3"></div>
+                            <div class="grid-line w-px bg-emerald-400/30 absolute top-0 bottom-0 left-1/4 animate-fade-in-delayed-4"></div>
+                            <div class="grid-line w-px bg-emerald-400/30 absolute top-0 bottom-0 left-2/4 animate-fade-in-delayed-5"></div>
+                            <div class="grid-line w-px bg-emerald-400/30 absolute top-0 bottom-0 left-3/4 animate-fade-in-delayed-6"></div>
+                        </div>
+
+                        <!-- Animated Chart SVG -->
+                        <svg class="w-full h-full relative z-10" viewBox="0 0 800 300">
+                            <defs>
+                                <linearGradient id="chartGradientEnhanced" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#a855f7;stop-opacity:0.6" />
+                                    <stop offset="30%" style="stop-color:#10b981;stop-opacity:0.4" />
+                                    <stop offset="70%" style="stop-color:#34d399;stop-opacity:0.2" />
+                                    <stop offset="100%" style="stop-color:#a855f7;stop-opacity:0" />
+                                </linearGradient>
+                                <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" style="stop-color:#a855f7;stop-opacity:1" />
+                                    <stop offset="50%" style="stop-color:#10b981;stop-opacity:1" />
+                                    <stop offset="100%" style="stop-color:#34d399;stop-opacity:1" />
+                                </linearGradient>
+                            </defs>
+                            
+                            <!-- Animated Performance Line -->
+                            <path id="performance-line" d="M0,250 Q80,220 160,200 T320,160 T480,120 T640,80 T800,60" 
+                                  stroke="url(#lineGradient)" 
+                                  stroke-width="4" 
+                                  fill="none" 
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  class="animate-draw-line-enhanced-slow"/>
+                            
+                            <!-- Animated Fill Area -->
+                            <path d="M0,250 Q80,220 160,200 T320,160 T480,120 T640,80 T800,60 L800,300 L0,300 Z" 
+                                  fill="url(#chartGradientEnhanced)" 
+                                  class="animate-fill-chart-enhanced-slow"/>
+                            
+                            <!-- Animated Data Points -->
+                            <circle cx="160" cy="200" r="6" fill="#a855f7" class="animate-pulse-data-point" style="animation-delay: 1s"/>
+                            <circle cx="320" cy="160" r="6" fill="#10b981" class="animate-pulse-data-point" style="animation-delay: 1.5s"/>
+                            <circle cx="480" cy="120" r="6" fill="#34d399" class="animate-pulse-data-point" style="animation-delay: 2s"/>
+                            <circle cx="640" cy="80" r="6" fill="#a855f7" class="animate-pulse-data-point" style="animation-delay: 2.5s"/>
+                            <circle cx="800" cy="60" r="6" fill="#10b981" class="animate-pulse-data-point" style="animation-delay: 3s"/>
+                        </svg>
+
+                        <!-- Animated Performance Indicators -->
+                        <div class="absolute top-4 left-4 space-y-2">
+                            <div class="flex items-center space-x-2 animate-slide-in-left-chart">
+                                <div class="w-3 h-3 bg-luxury-400 rounded-full animate-pulse-gentle"></div>
+                                <span class="text-luxury-400 font-elegant text-sm">Portfolio Value</span>
+                            </div>
+                            <div class="flex items-center space-x-2 animate-slide-in-left-chart-delay">
+                                <div class="w-3 h-3 bg-emerald-400 rounded-full animate-pulse-gentle-delay"></div>
+                                <span class="text-emerald-400 font-elegant text-sm">Market Benchmark</span>
+                            </div>
+                        </div>
+
+                        <!-- Animated Value Display -->
+                        <div class="absolute top-4 right-4 text-right animate-slide-in-right-chart">
+                            <div class="text-2xl font-luxury font-bold text-white mb-1">
+                                <span class="chart-value animate-counter" data-target="2847">0</span>K
+                            </div>
+                            <div class="text-emerald-400 font-elegant text-sm">
+                                +<span class="chart-growth animate-counter" data-target="24.7">0</span>% YTD
+                            </div>
+                        </div>
+
+                        <!-- Floating Animation Elements -->
+                        <div class="absolute top-1/4 left-1/3 w-2 h-2 bg-luxury-400/40 rounded-full animate-float-chart"></div>
+                        <div class="absolute top-1/2 right-1/4 w-1.5 h-1.5 bg-emerald-400/40 rounded-full animate-float-chart-delay"></div>
+                        <div class="absolute bottom-1/3 left-1/4 w-1 h-1 bg-luxury-500/40 rounded-full animate-float-chart-delay-2"></div>
+                    </div>
+
+                    <!-- Enhanced Chart Controls -->
+                    <div class="flex items-center justify-between mt-6 pt-6 border-t border-luxury-400/10">
+                        <div class="flex items-center space-x-4">
+                            <button class="chart-control-btn flex items-center space-x-2 px-4 py-2 bg-luxury-400/10 hover:bg-luxury-400/20 rounded-lg transition-colors duration-300">
+                                <i data-lucide="download" class="w-4 h-4 text-luxury-400"></i>
+                                <span class="text-luxury-400 font-elegant text-sm">Export</span>
+                            </button>
+                            <button class="chart-control-btn flex items-center space-x-2 px-4 py-2 bg-emerald-400/10 hover:bg-emerald-400/20 rounded-lg transition-colors duration-300">
+                                <i data-lucide="share-2" class="w-4 h-4 text-emerald-400"></i>
+                                <span class="text-emerald-400 font-elegant text-sm">Share</span>
+                            </button>
+                        </div>
+                        <div class="text-platinum-400 font-elegant text-sm">
+                            Last updated: <span class="text-luxury-400">2 minutes ago</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Enhanced Insights Section -->
+        <section id="insights" class="py-32 px-6">
+            <div class="max-w-7xl mx-auto">
+                <!-- Enhanced Section Header -->
+                <div class="text-center mb-20">
+                    <div class="inline-flex items-center space-x-2 bg-gradient-to-r from-luxury-400/10 to-emerald-500/10 backdrop-blur-sm border border-luxury-400/30 rounded-full px-6 py-3 mb-6 animate-slide-in-up">
+                        <i data-lucide="lightbulb" class="w-5 h-5 text-luxury-400 animate-pulse-luxury-enhanced"></i>
+                        <span class="text-emerald-300 font-elegant font-medium">Market Insights</span>
+                    </div>
+
+                    <h2 class="text-5xl md:text-6xl font-luxury font-bold mb-6 animate-fade-in-scale">
+                        <span class="bg-gradient-to-r from-luxury-300 via-emerald-400 to-luxury-500 bg-clip-text text-transparent animate-gradient-text">
+                            Expert Analysis
+                        </span>
+                    </h2>
+
+                    <p class="text-xl text-platinum-400 max-w-3xl mx-auto font-elegant animate-fade-in-up-delay">
+                        Stay ahead of market trends with our exclusive research and analysis
+                    </p>
+                </div>
+
+                <!-- Enhanced Insights Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <article class="luxury-insight-card group bg-gradient-to-br from-gray-900/50 to-black/50 backdrop-blur-sm rounded-2xl overflow-hidden border border-luxury-400/20 hover:border-emerald-400/40 transition-all duration-500 hover:scale-105 animate-slide-in-up-stagger">
+                        <div class="h-48 bg-gradient-to-br from-luxury-400/20 to-emerald-500/20 relative overflow-hidden">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                            <div class="absolute bottom-4 left-4 right-4">
+                                <span class="inline-block px-3 py-1 bg-luxury-400/20 text-luxury-400 text-sm font-elegant rounded-full animate-pulse-gentle">Market Analysis</span>
+                            </div>
+                        </div>
+                        
+                        <div class="p-6">
+                            <h3 class="text-xl font-luxury font-bold text-white mb-3 group-hover:text-luxury-400 transition-colors duration-300">
+                                Q4 2024 Market Outlook: Navigating Uncertainty
+                            </h3>
+                            <p class="text-platinum-400 font-elegant text-sm leading-relaxed mb-4">
+                                Our comprehensive analysis of global market conditions and strategic positioning for the upcoming quarter.
+                            </p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-emerald-400 font-elegant text-sm">December 15, 2024</span>
+                                <button class="text-luxury-400 hover:text-emerald-400 transition-colors duration-300 animate-bounce-gentle">
+                                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="luxury-insight-card group bg-gradient-to-br from-gray-900/50 to-black/50 backdrop-blur-sm rounded-2xl overflow-hidden border border-luxury-400/20 hover:border-emerald-400/40 transition-all duration-500 hover:scale-105 animate-slide-in-up-stagger-delay">
+                        <div class="h-48 bg-gradient-to-br from-emerald-500/20 to-luxury-600/20 relative overflow-hidden">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                            <div class="absolute bottom-4 left-4 right-4">
+                                <span class="inline-block px-3 py-1 bg-emerald-400/20 text-emerald-400 text-sm font-elegant rounded-full animate-pulse-gentle-delay">Investment Strategy</span>
+                            </div>
+                        </div>
+                        
+                        <div class="p-6">
+                            <h3 class="text-xl font-luxury font-bold text-white mb-3 group-hover:text-emerald-400 transition-colors duration-300">
+                                AI-Driven Portfolio Optimization
+                            </h3>
+                            <p class="text-platinum-400 font-elegant text-sm leading-relaxed mb-4">
+                                How artificial intelligence is revolutionizing investment strategies and portfolio management.
+                            </p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-luxury-400 font-elegant text-sm">December 12, 2024</span>
+                                <button class="text-emerald-400 hover:text-luxury-400 transition-colors duration-300 animate-bounce-gentle-delay">
+                                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="luxury-insight-card group bg-gradient-to-br from-gray-900/50 to-black/50 backdrop-blur-sm rounded-2xl overflow-hidden border border-luxury-400/20 hover:border-emerald-400/40 transition-all duration-500 hover:scale-105 animate-slide-in-up-stagger-delay-2">
+                        <div class="h-48 bg-gradient-to-br from-luxury-600/20 to-emerald-400/20 relative overflow-hidden">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                            <div class="absolute bottom-4 left-4 right-4">
+                                <span class="inline-block px-3 py-1 bg-luxury-500/20 text-luxury-400 text-sm font-elegant rounded-full animate-pulse-gentle-delay-2">Wealth Management</span>
+                            </div>
+                        </div>
+                        
+                        <div class="p-6">
+                            <h3 class="text-xl font-luxury font-bold text-white mb-3 group-hover:text-luxury-400 transition-colors duration-300">
+                                Estate Planning in the Digital Age
+                            </h3>
+                            <p class="text-platinum-400 font-elegant text-sm leading-relaxed mb-4">
+                                Modern approaches to wealth preservation and transfer for high-net-worth individuals.
+                            </p>
+                            <div class="flex items-center justify-between">
+                                <span class="text-emerald-400 font-elegant text-sm">December 10, 2024</span>
+                                <button class="text-luxury-400 hover:text-emerald-400 transition-colors duration-300 animate-bounce-gentle-delay-2">
+                                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Enhanced About Section -->
+        <section id="about" class="py-32 px-6 bg-gradient-to-b from-gray-900 via-purple-900/10 to-black">
+            <div class="max-w-7xl mx-auto">
+                <!-- Enhanced Section Header -->
+                <div class="text-center mb-20">
+                    <div class="inline-flex items-center space-x-2 bg-gradient-to-r from-luxury-400/10 to-emerald-500/10 backdrop-blur-sm border border-luxury-400/30 rounded-full px-6 py-3 mb-6 animate-slide-in-up">
+                        <i data-lucide="award" class="w-5 h-5 text-luxury-400 animate-pulse-luxury-enhanced"></i>
+                        <span class="text-emerald-300 font-elegant font-medium">Our Legacy</span>
+                    </div>
+
+                    <h2 class="text-5xl md:text-6xl font-luxury font-bold mb-6 animate-fade-in-scale">
+                        <span class="bg-gradient-to-r from-luxury-300 via-emerald-400 to-luxury-500 bg-clip-text text-transparent animate-gradient-text">
+                            Excellence Defined
+                        </span>
+                    </h2>
+
+                    <p class="text-xl text-platinum-400 max-w-3xl mx-auto font-elegant animate-fade-in-up-delay">
+                        Three decades of unwavering commitment to delivering exceptional investment results
+                    </p>
+                </div>
+
+                <!-- Enhanced Team Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="luxury-team-card group text-center bg-gradient-to-br from-gray-900/50 to-black/50 backdrop-blur-sm rounded-3xl p-8 border border-luxury-400/20 hover:border-emerald-400/40 transition-all duration-500 hover:scale-105 animate-slide-in-up-stagger">
+                        <div class="relative mb-6">
+                            <div class="w-24 h-24 bg-gradient-to-r from-luxury-400 to-emerald-500 rounded-2xl mx-auto flex items-center justify-center shadow-xl animate-pulse-gentle">
+                                <i data-lucide="user" class="w-12 h-12 text-black"></i>
+                            </div>
+                            <div class="absolute inset-0 bg-gradient-to-r from-luxury-400/20 to-emerald-500/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        </div>
+
+                        <h3 class="text-xl font-luxury font-bold text-white mb-2 group-hover:text-luxury-400 transition-colors duration-300">
+                            Marcus Aurelius
+                        </h3>
+
+                        <p class="text-emerald-400 font-elegant font-medium mb-4">Chief Executive Officer</p>
+
+                        <p class="text-platinum-400 font-elegant text-sm leading-relaxed group-hover:text-platinum-300 transition-colors duration-300">
+                            Former Goldman Sachs Managing Director with 25+ years in wealth management and investment banking.
+                        </p>
+                    </div>
+
+                    <div class="luxury-team-card group text-center bg-gradient-to-br from-gray-900/50 to-black/50 backdrop-blur-sm rounded-3xl p-8 border border-luxury-400/20 hover:border-emerald-400/40 transition-all duration-500 hover:scale-105 animate-slide-in-up-stagger-delay">
+                        <div class="relative mb-6">
+                            <div class="w-24 h-24 bg-gradient-to-r from-emerald-400 to-luxury-500 rounded-2xl mx-auto flex items-center justify-center shadow-xl animate-pulse-gentle-delay">
+                                <i data-lucide="user" class="w-12 h-12 text-black"></i>
+                            </div>
+                            <div class="absolute inset-0 bg-gradient-to-r from-emerald-400/20 to-luxury-500/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        </div>
+
+                        <h3 class="text-xl font-luxury font-bold text-white mb-2 group-hover:text-emerald-400 transition-colors duration-300">
+                            Victoria Sterling
+                        </h3>
+
+                        <p class="text-luxury-400 font-elegant font-medium mb-4">Chief Investment Officer</p>
+
+                        <p class="text-platinum-400 font-elegant text-sm leading-relaxed group-hover:text-platinum-300 transition-colors duration-300">
+                            Harvard MBA and CFA charterholder specializing in alternative investments and risk management.
+                        </p>
+                    </div>
+
+                    <div class="luxury-team-card group text-center bg-gradient-to-br from-gray-900/50 to-black/50 backdrop-blur-sm rounded-2xl p-8 border border-luxury-400/20 hover:border-emerald-400/40 transition-all duration-500 hover:scale-105 animate-slide-in-up-stagger-delay-2">
+                        <div class="relative mb-6">
+                            <div class="w-24 h-24 bg-gradient-to-r from-luxury-500 to-emerald-400 rounded-2xl mx-auto flex items-center justify-center shadow-xl animate-pulse-gentle-delay-2">
+                                <i data-lucide="user" class="w-12 h-12 text-black"></i>
+                            </div>
+                            <div class="absolute inset-0 bg-gradient-to-r from-luxury-500/20 to-emerald-400/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        </div>
+
+                        <h3 class="text-xl font-luxury font-bold text-white mb-2 group-hover:text-luxury-400 transition-colors duration-300">
+                            Alexander Cross
+                        </h3>
+
+                        <p class="text-emerald-400 font-elegant font-medium mb-4">Head of Technology</p>
+
+                        <p class="text-platinum-400 font-elegant text-sm leading-relaxed group-hover:text-platinum-300 transition-colors duration-300">
+                            Former quantitative analyst at Renaissance Technologies, leading our AI and algorithmic trading initiatives.
+                        </p>
+                    </div>
+
+                    <div class="luxury-team-card group text-center bg-gradient-to-br from-gray-900/50 to-black/50 backdrop-blur-sm rounded-3xl p-8 border border-luxury-400/20 hover:border-emerald-400/40 transition-all duration-500 hover:scale-105 animate-slide-in-up-stagger-delay-3">
+                        <div class="relative mb-6">
+                            <div class="w-24 h-24 bg-gradient-to-r from-emerald-500 to-luxury-400 rounded-2xl mx-auto flex items-center justify-center shadow-xl animate-pulse-gentle-delay-3">
+                                <i data-lucide="user" class="w-12 h-12 text-black"></i>
+                            </div>
+                            <div class="absolute inset-0 bg-gradient-to-r from-emerald-500/20 to-luxury-400/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        </div>
+
+                        <h3 class="text-xl font-luxury font-bold text-white mb-2 group-hover:text-emerald-400 transition-colors duration-300">
+                            Sophia Blackwood
+                        </h3>
+
+                        <p class="text-luxury-400 font-elegant font-medium mb-4">Director of Client Relations</p>
+
+                        <p class="text-platinum-400 font-elegant text-sm leading-relaxed group-hover:text-platinum-300 transition-colors duration-300">
+                            Wharton graduate with expertise in private wealth management and family office services.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Enhanced Contact Section -->
+        <section id="contact" class="py-32 px-6">
+            <div class="max-w-7xl mx-auto">
+                <!-- Enhanced Section Header -->
+                <div class="text-center mb-20">
+                    <div class="inline-flex items-center space-x-2 bg-gradient-to-r from-luxury-400/10 to-emerald-500/10 backdrop-blur-sm border border-luxury-400/30 rounded-full px-6 py-3 mb-6 animate-slide-in-up">
+                        <i data-lucide="phone" class="w-5 h-5 text-luxury-400 animate-pulse-luxury-enhanced"></i>
+                        <span class="text-emerald-300 font-elegant font-medium">Get in Touch</span>
+                    </div>
+
+                    <h2 class="text-5xl md:text-6xl font-luxury font-bold mb-6 animate-fade-in-scale">
+                        <span class="bg-gradient-to-r from-luxury-300 via-emerald-400 to-luxury-500 bg-clip-text text-transparent animate-gradient-text">
+                            Begin Your Journey
+                        </span>
+                    </h2>
+
+                    <p class="text-xl text-platinum-400 max-w-3xl mx-auto font-elegant animate-fade-in-up-delay">
+                        Schedule a private consultation with our wealth management experts
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+                    <!-- Enhanced Contact Info -->
+                    <div class="space-y-8 animate-slide-in-left">
+                        <div>
+                            <h3 class="text-3xl font-luxury font-bold text-white mb-6">Exclusive Access</h3>
+                            <p class="text-platinum-400 font-elegant text-lg leading-relaxed">
+                                Join an elite circle of investors who demand excellence. Our private wealth management services 
+                                are available by invitation only to qualified high-net-worth individuals.
+                            </p>
+                        </div>
+
+                        <div class="space-y-6">
+                            <div class="flex items-center space-x-4 group animate-slide-in-left-delay">
+                                <div class="w-12 h-12 bg-gradient-to-r from-luxury-400 to-emerald-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 animate-pulse-gentle">
+                                    <i data-lucide="phone" class="w-6 h-6 text-black"></i>
+                                </div>
+                                <div>
+                                    <div class="text-platinum-400 font-elegant text-sm">Private Line</div>
+                                    <div class="text-white font-elegant font-medium">+1 (212) 555-GOLD</div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center space-x-4 group animate-slide-in-left-delay-2">
+                                <div class="w-12 h-12 bg-gradient-to-r from-emerald-400 to-luxury-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 animate-pulse-gentle-delay">
+                                    <i data-lucide="mail" class="w-6 h-6 text-black"></i>
+                                </div>
+                                <div>
+                                    <div class="text-platinum-400 font-elegant text-sm">Email</div>
+                                    <div class="text-white font-elegant font-medium">wealth@aureliuscapital.com</div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center space-x-4 group animate-slide-in-left-delay-3">
+                                <div class="w-12 h-12 bg-gradient-to-r from-luxury-500 to-emerald-400 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 animate-pulse-gentle-delay-2">
+                                    <i data-lucide="map-pin" class="w-6 h-6 text-black"></i>
+                                </div>
+                                <div>
+                                    <div class="text-platinum-400 font-elegant text-sm">Headquarters</div>
+                                    <div class="text-white font-elegant font-medium">Manhattan, New York</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Enhanced Contact Form -->
+                    <div class="relative animate-slide-in-right">
+                        <div class="absolute -inset-1 bg-gradient-to-r from-luxury-400 via-emerald-500 to-luxury-600 rounded-3xl blur opacity-20 animate-pulse-gentle"></div>
+
+                        <form id="luxury-contact-form" class="relative bg-gray-900/90 backdrop-blur-sm rounded-3xl p-8 border border-luxury-400/20">
+                            <div class="space-y-6">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div class="animate-fade-in-up-stagger">
+                                        <label class="block text-emerald-300 font-elegant font-medium mb-2">First Name</label>
+                                        <input type="text" name="firstName" required class="w-full px-4 py-3 bg-black/50 border border-luxury-400/30 rounded-xl text-white font-elegant placeholder-platinum-500 focus:border-emerald-400 focus:outline-none transition-colors duration-300" placeholder="John">
+                                    </div>
+                                    <div class="animate-fade-in-up-stagger-delay">
+                                        <label class="block text-emerald-300 font-elegant font-medium mb-2">Last Name</label>
+                                        <input type="text" name="lastName" required class="w-full px-4 py-3 bg-black/50 border border-luxury-400/30 rounded-xl text-white font-elegant placeholder-platinum-500 focus:border-emerald-400 focus:outline-none transition-colors duration-300" placeholder="Doe">
+                                    </div>
+                                </div>
+
+                                <div class="animate-fade-in-up-stagger-delay-2">
+                                    <label class="block text-emerald-300 font-elegant font-medium mb-2">Email Address</label>
+                                    <input type="email" name="email" required class="w-full px-4 py-3 bg-black/50 border border-luxury-400/30 rounded-xl text-white font-elegant placeholder-platinum-500 focus:border-emerald-400 focus:outline-none transition-colors duration-300" placeholder="john@example.com">
+                                </div>
+
+                                <div class="animate-fade-in-up-stagger-delay-3">
+                                    <label class="block text-emerald-300 font-elegant font-medium mb-2">Investment Range</label>
+                                    <select name="investmentRange" required class="w-full px-4 py-3 bg-black/50 border border-luxury-400/30 rounded-xl text-white font-elegant focus:border-emerald-400 focus:outline-none transition-colors duration-300">
+                                        <option value="">Select Range</option>
+                                        <option value="1-5M">$1M - $5M</option>
+                                        <option value="5-10M">$5M - $10M</option>
+                                        <option value="10-25M">$10M - $25M</option>
+                                        <option value="25M+">$25M+</option>
+                                    </select>
+                                </div>
+
+                                <div class="animate-fade-in-up-stagger-delay-4">
+                                    <label class="block text-emerald-300 font-elegant font-medium mb-2">Message</label>
+                                    <textarea name="message" rows="4" required class="w-full px-4 py-3 bg-black/50 border border-luxury-400/30 rounded-xl text-white font-elegant placeholder-platinum-500 focus:border-emerald-400 focus:outline-none transition-colors duration-300 resize-none" placeholder="Tell us about your investment goals..."></textarea>
+                                </div>
+
+                                <button type="submit" class="w-full relative px-8 py-4 bg-gradient-to-r from-luxury-400 to-emerald-500 text-black font-elegant font-semibold rounded-xl hover:from-luxury-300 hover:to-emerald-400 transition-all duration-300 hover:scale-105 overflow-hidden group animate-bounce-gentle">
+                                    <span class="relative z-10 flex items-center justify-center">
+                                        <i data-lucide="send" class="w-5 h-5 mr-2"></i>
+                                        Schedule Consultation
+                                    </span>
+                                    <div class="absolute inset-0 bg-gradient-to-r from-emerald-400 to-luxury-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                    <div class="absolute inset-0 animate-shimmer-button"></div>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enhanced Footer -->
+            <footer class="mt-16 pt-16 border-t border-luxury-400/20 animate-fade-in-up">
+                <div class="text-center">
+                    <div class="flex items-center justify-center space-x-3 mb-4">
+                        <div class="w-10 h-10 bg-gradient-to-r from-luxury-400 to-emerald-500 rounded-lg flex items-center justify-center animate-pulse-gentle">
+                            <i data-lucide="crown" class="w-6 h-6 text-black"></i>
+                        </div>
+                        <div class="text-3xl font-luxury font-bold bg-gradient-to-r from-luxury-400 via-emerald-400 to-luxury-600 bg-clip-text text-transparent animate-gradient-text">
+                            Aurelius Capital
+                        </div>
+                    </div>
+                    <p class="text-platinum-400 font-elegant mb-8">Where wealth meets wisdom</p>
+                    <div class="text-platinum-500 font-elegant text-sm">© 2024 Aurelius Capital. All rights reserved. | Licensed Investment Advisor</div>
+                </div>
+            </footer>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>
